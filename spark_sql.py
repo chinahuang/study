@@ -1,0 +1,2 @@
+#建议使用jupyter来调试学习
+#PYSPARK_DRIVER_PYTHON=ipython PYSPARK_PYSPARK_DRIVER_PYTHON_OPTS="notebook" pyspark
