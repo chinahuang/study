@@ -31,12 +31,23 @@ df.show(5)
 #注册Spark SQL
 user_df.registerTemple("user_table")
 sqlContext.sql("SELECT count(*) counts FROM user_table").show()
-
                         
+#SELECT 显示部分字段
+userRDDnew=userRDD.map(lambda x:(x[0],x[3],x[2],x[1])
+userRDDnew.take(5)
+                       
+user_df.select("userid","occupation","gender","age").show(5)
+user_df.select(user_df.userid,user_df.occupation,user_df.gender,user_df.age).show(5)
+df.select(df.userid,df.occupation,df.gender,df.age).show(5)
+df[df['userid'],df['occupation'],df['gender'],df['age']].show(5)
 
+sqlContext.sql("SELECT userid,occupation,gender,age FROM user_table").show(5)                       
 
+#增加计算字段
+#x[1]是年龄，添加的字段为用户出生年份                       
+userRDDnew=userRDD.map(lambda x:(x[0],x[3],x[2],x[1],2019-int(x[1]))                       
+userRDDnew.take(5)
 
-
-
-
+df.select("userid","occupation","gender","age",2019-df.age).show(5)
+df.select("userid","occupation","gender","age",(2019-df.age).alias("birthyear").show(5)                       
   
