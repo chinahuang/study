@@ -50,4 +50,12 @@ userRDDnew.take(5)
 
 df.select("userid","occupation","gender","age",2019-df.age).show(5)
 df.select("userid","occupation","gender","age",(2019-df.age).alias("birthyear").show(5)                       
-  
+
+sqlContext.sql("SELECT userid,occupation,gender,age,2016-age FROM user_table).show(5)
+               
+#筛选数据
+userRDDnew.filter(lambda r: r[3]=='technician' and r[2]=='M' and r[1]=='24').take(6)
+
+user_df.filter("occupation='technician'").filter("gender='M'").filter("age=24").show()
+df.filter((df.occupation=='technician')&(df.gender=='M')&(df.age==24)).show()
+
