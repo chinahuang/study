@@ -2,6 +2,7 @@
 import optparse
 import scoket
 import threading
+import nmap
 
 screenLock=threading.Semaphore(value=1)
 def connScan(tgtHost,tgtPort):
@@ -36,6 +37,12 @@ def portScan(tgtHost,tgtPorts):
         print('Scanning port'+str(tgtPort))
         t=threading.Thread(target=connScan,args=(tgtHost,int(tgtPort)))
         t.start()
+        
+def nmapScan(tgtHost,tgtPort):
+    nmScan=nmap.PortScanner()
+    results=nmScan.scan(tgtHost,tgtPort)
+    state=results['scan'][tgtHost]['tcp'][int(tgtPort)]['state']
+    print("[*]"+tgtHost+" tcp/"+tgtPort+" "+state)
         
 parser=optparse.OptionParser('usage % prog -H <targethost> -p <target port>')
 parser.add_option('-H',dest='tgtHost',type='string',help='specify target host')
