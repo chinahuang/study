@@ -1,18 +1,24 @@
 #coding=UTF-8
 import optparse
 import scoket
+import threading
 
+screenLock=threading.Semaphore(value=1)
 def connScan(tgtHost,tgtPort):
     try:
         connSkt=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
         connSkt.connect((tgtHost,tgtPort))
         connSkt.send('HaveFun\r\n')
         results=connSkt.resv(100)
+        screenLock.acquire()
         print('[+]%d/tcp open'% tgtPort)
         print('[+]' + str(results))
-        connSkt.close()
     except:
+        screenLock.acquire()
         print('[-]%d/tcp closed'% tgtPort)
+    finally:
+        screenLock.release()
+        connSkt.close()
         
 def portScan(tgtHost,tgtPorts):
     try:
@@ -28,7 +34,8 @@ def portScan(tgtHost,tgtPorts):
     scoket.setdefaulttimeout(1)
     for tgtPort in tgtPorts:
         print('Scanning port'+str(tgtPort))
-        connScan(tgtHost,int(tgtPort))
+        t=threading.Thread(target=connScan,args=(tgtHost,int(tgtPort)))
+        t.start()
         
 parser=optparse.OptionParser('usage % prog -H <targethost> -p <target port>')
 parser.add_option('-H',dest='tgtHost',type='string',help='specify target host')
