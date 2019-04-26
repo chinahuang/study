@@ -58,4 +58,20 @@ userRDDnew.filter(lambda r: r[3]=='technician' and r[2]=='M' and r[1]=='24').tak
 
 user_df.filter("occupation='technician'").filter("gender='M'").filter("age=24").show()
 df.filter((df.occupation=='technician')&(df.gender=='M')&(df.age==24)).show()
+df.filter((df['occupation']=='technician')&(df['gender']=='M')&(df['age']==24)).show()
 
+sqlContext.sql("SELECT * FROM user_table where occupation='technician' and gender='M' and age=24").show(5)   
+               
+#数据排序
+userRDDnew.takeOrdered(5,key=lambda x:int(x[1]))
+userRDDnew.takeOrdered(5,key=lambda x: -1*int(x[1]))      
+               
+user_df.select("userid","occupation","gender","age").orderBy("age").show(5)
+df.select("userid","occupation","gender","age").orderBy("age",ascending=0).show(5)
+df.select("userid","occupation","gender","age").orderBy(df.age.desc()).show(5)               
+
+sqlContext.sql("SELECT userid,occupation,gender,age FROM user_table ORDER BY age").show(5)
+sqlContext.sql("SELECT userid,occupation,gender,age FROM user_table ORDER BY age DESC").show(5)
+               
+#按多个字段给数据排序
+userRDD.takeOrdered(5,key=lambda x:(-int(x[1],x[2]))               
