@@ -74,4 +74,21 @@ sqlContext.sql("SELECT userid,occupation,gender,age FROM user_table ORDER BY age
 sqlContext.sql("SELECT userid,occupation,gender,age FROM user_table ORDER BY age DESC").show(5)
                
 #按多个字段给数据排序
-userRDD.takeOrdered(5,key=lambda x:(-int(x[1],x[2]))               
+userRDD.takeOrdered(5,key=lambda x:(-int(x[1]),x[2]))
+
+df.orderBy(["age","gender"],ascending=[0,1]).show(5)
+df.orderBy(df.age.desc(),df.gender).show(5)
+               
+sqlContext.sql("SELECT userid,age,gender.occupation,zipcode FROM user_table ORDER BY age DESC,gender").show(5)
+               
+#显示不重复的数据
+userRDD.map(lambda x:x[2]).distinct().collect()
+userRDD.map(lambda x:(x[1],x[2])).distinct().take(20)
+               
+user_df.select("gender").distinct().show()
+user_df.select("age","gender").distinct().show()
+               
+sqlContext.sql("SELECT distinct age.gender FROM user_table").show() 
+               
+#分组统计数据
+               
